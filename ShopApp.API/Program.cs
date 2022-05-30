@@ -1,13 +1,15 @@
 using Serilog;
 using Microsoft.EntityFrameworkCore;
+using ShopApp.API.Data;
+using ShopApp.API.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//builder.Services.AddDbContext<ShopAppDbContext>(options => options.UseSqlServer(
-//    builder.Configuration.GetConnectionString("DefaultConnection")
-//));
-
+builder.Services.AddDbContext<BookShopDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+));
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

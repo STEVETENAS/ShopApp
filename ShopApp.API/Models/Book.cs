@@ -15,6 +15,7 @@ namespace ShopApp.API.Models
         public int AuthorId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public virtual Author Author { get; set; } = null!;
     }

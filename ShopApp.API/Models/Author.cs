@@ -16,6 +16,7 @@ namespace ShopApp.API.Models
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public virtual ICollection<Book> Books { get; set; }
     }
