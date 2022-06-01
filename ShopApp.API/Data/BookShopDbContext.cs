@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using ShopApp.API.Models;
 
 namespace ShopApp.API.Data
 {
-    public partial class BookShopDbContext : DbContext
+    public partial class BookShopDbContext : IdentityDbContext<ApiUser>
     {
         public BookShopDbContext()
         {
@@ -22,6 +21,67 @@ namespace ShopApp.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            dynamic user1;
+            dynamic user2;
+            dynamic role1;
+            dynamic role2;
+
+            modelBuilder.Entity<IdentityRole>().HasData(
+                role1 = new IdentityRole
+                {
+                    Name =  "User",
+                    NormalizedName = "USER",
+                    Id = Guid.NewGuid().ToString(),
+                },
+                role2 = new IdentityRole
+                {
+                    Name =  "Admin",
+                    NormalizedName = "ADMIN",
+                    Id = Guid.NewGuid().ToString(),
+                }
+            );
+
+            var hash = new PasswordHasher<ApiUser>();
+
+            modelBuilder.Entity<ApiUser>().HasData(
+                user1 = new ApiUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Email = "tenas@gmail.com",
+                    NormalizedEmail = "TENAS@GMAIL.COM",
+                    FirstName = "Tenas",
+                    LastName = "Steve",
+                    UserName = "stevetenas",
+                    NormalizedUserName = "STEVETENAS",
+                    PasswordHash = hash.HashPassword(null, "P@ssword1")
+                },
+                user2 = new ApiUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Email = "user@gmail.com",
+                    NormalizedEmail = "USER@GMAIL.COM",
+                    FirstName = "System",
+                    LastName = "User",
+                    UserName = "systemuser",
+                    NormalizedUserName = "SYSTEMUSER",
+                    PasswordHash = hash.HashPassword(null, "P@ssword1")
+                }
+            );
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    RoleId = role1.Id,
+                    UserId = user1.Id,
+                },
+                new IdentityUserRole<string>
+                {
+                    RoleId = role2.Id,
+                    UserId = user2.Id,
+                }
+            );
+
             modelBuilder.Entity<Author>(entity =>
             {
                 entity.Property(e => e.CreatedAt)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopApp.API.Data;
@@ -9,7 +10,7 @@ using ShopApp.API.Static;
 namespace ShopApp.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class AuthorsController : ControllerBase
     {
         private readonly BookShopDbContext _context;
@@ -67,7 +68,7 @@ namespace ShopApp.API.Controllers
 
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAuthor(int id, AuthorUpdateDto request)
         {
             if (id != request.Id)
@@ -100,7 +101,7 @@ namespace ShopApp.API.Controllers
 
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<AuthorGetDto>> PostAuthor(AuthorCreateDto request)
         {
             try
@@ -123,7 +124,7 @@ namespace ShopApp.API.Controllers
         }
 
         // DELETE: api/Authors/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             try
